@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1> {{chat.chat_name}} </h1>
+                <div style="max-height: 600px;     overflow-y: auto;">
+                    {% for item in messages %}
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-user"></i> {{ item.author }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Published: {{ item.published_time }}</h6>
+                            <p class="card-text">{{ item.text }}</p>
+                            <div class="d-flex justify-content-end">
+                                {% if item.author == current_user %}
+                                <a href="/chat/edit-message/{{item.id}}" class="btn btn-sm mr-2">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <a href="/chat/delete-message/{{item.id}}" class="btn btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+                <form method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="text" class="form-label">New message:</label>
+                        <input type="text" id="text" name="text" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-success ">Send message</button>
+                    <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to home</a>
+                </form>
+            </div>
+
+            <div class="col-md-4">
+                <h2>Members</h2>
+                <ul class="list-group">
+                    {% for user in users %}
+                    <li class="list-group-item">{{user}}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
