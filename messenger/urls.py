@@ -15,15 +15,17 @@ Including another URLconf
 """
 from django.urls import path
 from messenger import views
+from django.views import View
+
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('chat_list/', views.chat_list, name='chat_list'),
-    path('chat/<int:chat_id>/', views.chat_view, name='chat_view'),
-    path('chat_create/', views.chat_create, name='chat_create'),
+    path('', views.Home.as_view(), name='home'),
+    path('chat_list/', views.ChatList.as_view(), name='chat_list'),
+    path('chat/<int:chat_id>/', views.ChatView.as_view(), name='chat_view'),
+    path('chat_create/', views.ChatCreate.as_view(), name='chat_create'),
     path('access_required/', views.access_required_page, name='access_required'),
-    path('chat/delete-message/<int:message_id>/', views.message_delete, name='message_delete'),
-    path('chat/edit-message/<int:message_id>/', views.edit_message, name='edit_message'),
+    path('chat/delete-message/<int:message_id>/', views.MessageDelete.as_view(), name='message_delete'),
+    path('chat/edit-message/<int:message_id>/', views.MessageEdit.as_view(), name='edit_message'),
 
 ]

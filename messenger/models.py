@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 User = get_user_model()
 
@@ -25,9 +24,11 @@ class Message(models.Model):
     published_time = models.DateField(auto_now_add=True)
     chat_id = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
 
-    def can_edit_or_delete_message(self, user):
-        if self.author:
-            return self.author == user and (timezone.now().date() - self.published_time).days < 1
-        return True
 
+class LogEntry(models.Model):
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Message, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.timestamp} - {self.author}: {self.action}"
