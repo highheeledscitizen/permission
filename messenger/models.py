@@ -26,9 +26,9 @@ class Message(models.Model):
 
 
 class LogEntry(models.Model):
-    action = models.CharField(max_length=255)
+    action = models.TextField(max_length=700, blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Message, on_delete=models.CASCADE)
+    author = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.timestamp} - {self.author}: {self.action}"

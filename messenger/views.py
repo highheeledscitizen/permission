@@ -4,12 +4,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
 from django.views.generic import TemplateView,ListView
-from .mixin import (ChatMemberRequiredMixin,
-                    SuperuserRequiredMixin,
-                    AddChatPermissionMixin,
-                    MessageDeleteMixin,
-                    MessageEditMixin,
-                    DeleteEditeRequiredMixin)
+from .mixins import (ChatMemberRequiredMixin,
+                     SuperuserRequiredMixin,
+                     AddChatPermissionMixin,
+                     MessageDeleteMixin,
+                     MessageEditMixin,
+                     DeleteEditeRequiredMixin)
 
 User = get_user_model()
 
