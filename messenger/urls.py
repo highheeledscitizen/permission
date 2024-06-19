@@ -27,5 +27,6 @@ urlpatterns = [
     path('access_required/', views.access_required_page, name='access_required'),
     path('chat/delete-message/<int:message_id>/', views.MessageDelete.as_view(), name='message_delete'),
     path('chat/edit-message/<int:message_id>/', views.MessageEdit.as_view(), name='edit_message'),
+    path('get_online_status/<str:username>/', views.get_online_status, name='get_online_status'),
 
 ]

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Chat, Message
+from .models import Chat, Message, UserStatus
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
-from django.views.generic import TemplateView,ListView
+from django.views.generic import TemplateView, ListView
+from django.http import JsonResponse
 from .mixins import (ChatMemberRequiredMixin,
                      SuperuserRequiredMixin,
                      AddChatPermissionMixin,
@@ -89,3 +90,11 @@ class MessageEdit(LoginRequiredMixin, MessageEditMixin, DeleteEditeRequiredMixin
 
 def access_required_page(request):
     return render(request, "system/access_required.html")
+
+
+def get_online_status(request, username):
+    user = User.objects.get(username=username)
+    status, created = UserStatus.objects.get_or_create(user=user)
+    if created:
+        status.save()
+    return JsonResponse({'online': status.online})

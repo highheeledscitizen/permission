@@ -32,3 +32,11 @@ class LogEntry(models.Model):
 
     def __str__(self):
         return f"{self.timestamp} - {self.author}: {self.action}"
+
+
+class UserStatus(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    online = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username} status is {self.online}'
