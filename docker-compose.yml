@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  django_app:
+    build: .
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./hw7:/tsy_project/hw7
+    ports:
+      - "8000:8000"
+    depends_on:
+      - psql_db
+
+  psql_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: django_db
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  celery-beat:
+    build: .
+    command: celery -A hw7 beat -l info
+    volumes:
+      - ./hw7:/tsy_project/hw7
+    depends_on:
+    - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+  celery-worker:
+    build: .
+    command: celery -A hw7 worker -l info
+    volumes:
+      - ./hw7:/tsy_project/hw7
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0

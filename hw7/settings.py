@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'hw7.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_db',
+        'USER': 'admin_user',
+        'PASSWORD': 'password',
+        'HOST': 'psql_db',
+        'PORT': ''
     }
 }
 
@@ -129,3 +133,14 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/access_required/'
+
+from .celery import app
+from celery.schedules import crontab
+
+
+app.conf.beat_schedule = {
+    'log_last_ten_messages-every-5-minutes': {
+        'task': 'messenger.tasks.log_last_ten_messages',
+        'schedule': crontab(minute='*/5'),
+    }
+}
